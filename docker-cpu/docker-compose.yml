@@ -1,0 +1,11 @@
+version: '2.3'
+
+services:
+   sign-spotter:
+     container_name: sign-spotter
+     build: ./
+     restart: always
+     ports:
+      - '8888:8888'
+     environment:
+      - DISPLAY=$DISPLAY
