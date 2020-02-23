@@ -8,7 +8,9 @@ services:
      ports:
       - '8888:8888'
       - '6006:6006'
+     runtime: nvidia
      voumes:
       - ~/sign-spotter-model:/models/research/object_detection/sign-spotter
      environment:
       - DISPLAY=$DISPLAY
+      - NVIDIA_VISIBLE_DEVICES=all

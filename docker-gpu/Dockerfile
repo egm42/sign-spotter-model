@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:1.14.0-py3
+FROM tensorflow/tensorflow:1.14.0-gpu-py3
 
 RUN apt-get update && apt-get upgrade -y
 
