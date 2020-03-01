@@ -1,2 +1,7 @@
 .sign-spotter-model/
 .vscode/
+
+# Folders contain processed files and files pending processing
+input/
+output/
+.env
