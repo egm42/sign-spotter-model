@@ -12,10 +12,10 @@ env_dir = Path(os.path.dirname(__file__)).parent
 env_path = os.path.join(env_dir, '.env')
 load_dotenv(dotenv_path=env_path)
 
-def srt_to_json(filename):
+def parse_srt(filename):
     subs = pysrt.open(filename)
 
-    data = {}
+    data = []
     temp = []
 
     for sub in subs:
@@ -30,26 +30,23 @@ def srt_to_json(filename):
                 'index': sub.index,
                 'latitude': latitude,
                 'longitude': longitude,
-                'datetime': str(str_time)       
+                'datetime': str_time       
             })
-            # print(temp)
         except IndexError as e:
-            # print(e)
             pass
 
-    data[filename] = temp
+    return [{Path(filename).stem: temp}]
 
-    return data
-
-    # client = pymongo.MongoClient(os.getenv('MLAB_URI'), retryWrites = False)
-    # db = client.get_default_database()
-    # signs = db.signs
-    # signs.insert_many(data)
+def to_mongo(data):
+    client = pymongo.MongoClient(os.getenv('MLAB_URI'), retryWrites = False)
+    db = client.get_default_database()
+    gps = db.gps
+    gps.insert_many(data)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert MP4s into JPGs')
     parser.add_argument('-i', '--input_file', type=str, required=True, help='MP4 filepath')
     args = parser.parse_args()
 
-    json = srt_to_json(args.input_file)
-    print(json)
+    ouput = parse_srt(args.input_file)
+    to_mongo(ouput)
