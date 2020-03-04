@@ -37,11 +37,11 @@ def parse_srt(filename):
 
     return [{Path(filename).stem: temp}]
 
-def to_mongo(data):
+def to_mongo(data, collection):
     client = pymongo.MongoClient(os.getenv('MLAB_URI'), retryWrites = False)
     db = client.get_default_database()
-    gps = db.gps
-    gps.insert_many(data)
+    collection = db[collection]
+    collection.insert_many(data)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert MP4s into JPGs')
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     ouput = parse_srt(args.input_file)
-    to_mongo(ouput)
+    to_mongo(ouput, 'gps')
