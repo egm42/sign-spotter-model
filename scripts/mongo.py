@@ -12,6 +12,7 @@ env_dir = Path(os.path.dirname(__file__)).parent
 env_path = os.path.join(env_dir, '.env')
 load_dotenv(dotenv_path=env_path)
 
+# TODO: update returned data format to make searching by file easier/possible
 def parse_srt(filename):
     subs = pysrt.open(filename)
 
@@ -43,10 +44,18 @@ def to_mongo(data, collection):
     collection = db[collection]
     collection.insert_many(data)
 
+def get_data(collection, parameters):
+    client = pymongo.MongoClient(os.getenv('MLAB_URI'))
+    db = client.get_default_database()
+    collection = db[collection]
+    entries = collection.count_documents({parameters})
+    return entries
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert MP4s into JPGs')
-    parser.add_argument('-i', '--input_file', type=str, required=True, help='MP4 filepath')
+    parser.add_argument('-i', '--input_file', type=str, required=False, help='MP4 filepath')
     args = parser.parse_args()
 
-    ouput = parse_srt(args.input_file)
-    to_mongo(ouput, 'gps')
+    # ouput = parse_srt(args.input_file)
+    # to_mongo(ouput, 'gps')
+    get_data('gps')
