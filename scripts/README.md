@@ -7,7 +7,7 @@ Use this script to install Docker, NVIDIA drivers and NVIDIA runtime toolkit. Th
     
  ## process_LISA.py script
  
- Defining componstents of the object tags.
+ Defining components of the object tags.
    
   [Pose]: 
             Details about the orientation of the object being labeled.
