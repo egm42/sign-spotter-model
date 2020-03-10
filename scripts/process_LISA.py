@@ -54,31 +54,31 @@ def process(input_dir, output_dir, sign_list):
             Axis-aligned rectangle specifying the extent of the object visible in the image.
             """
             box = ET.SubElement(obj, "bndbox")
-            
-            
-            
             ET.SubElement(box, "xmin").text = str(row.upper_left_corner_x)
             ET.SubElement(box, "ymin").text = str(row.upper_left_corner_y)
             ET.SubElement(box, "xmax").text = str(row.lower_right_corner_x)
             ET.SubElement(box, "ymax").text = str(row.lower_right_corner_y)
+            
             tree = ET.ElementTree(root)
             tree.write(xml_file)
         else:
+            #Construct path for outputting text file
             root = ET.Element("annotation")
             ET.SubElement(root, "folder").text = output_dir
             ET.SubElement(root, "filename").text = os.path.basename(row.filename)
             ET.SubElement(root, "path").text = str(pathlib.Path(row.filename).absolute())
             source = ET.SubElement(root, "source")
+            
             ET.SubElement(source, "database").text = "Unknown"
             size = ET.SubElement(root, "size")
             ET.SubElement(size, "width").text = str(w)
             ET.SubElement(size, "height").text = str(h)
             ET.SubElement(size, "depth").text = str(c)
             ET.SubElement(root, "segmented").text = "0"
+            
             obj = ET.SubElement(root, "object")
             ET.SubElement(obj, "name").text = row.annotation_tag
 
-            # Determine what these tags mean
             ET.SubElement(obj, "pose").text = "Unspecified"
             ET.SubElement(obj, "truncated").text = "1"
             ET.SubElement(obj, "difficult").text = "0"
@@ -88,6 +88,7 @@ def process(input_dir, output_dir, sign_list):
             ET.SubElement(box, "ymin").text = str(row.upper_left_corner_y)
             ET.SubElement(box, "xmax").text = str(row.lower_right_corner_x)
             ET.SubElement(box, "ymax").text = str(row.lower_right_corner_y)
+            
             tree = ET.ElementTree(root)
             tree.write(xml_file)
 
